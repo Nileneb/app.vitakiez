@@ -61,4 +61,20 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    /**
+     * Get the WGs owned by this user
+     */
+    public function wgs()
+    {
+        return $this->hasMany(Wg::class, 'owner_user_id');
+    }
+
+    /**
+     * Get the active WG for this user
+     */
+    public function activeWg()
+    {
+        return $this->belongsTo(Wg::class, 'active_wg');
+    }
 }

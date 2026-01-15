@@ -18,12 +18,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create test user with random password
+        // Create test user without using factory (faker not available in production)
         $password = 'TestPass123!';
-        $user = User::factory()->create([
+        $user = User::create([
             'name' => 'nileneb',
             'email' => 'bene.linn@yahoo.de',
+            'email_verified_at' => now(),
             'password' => bcrypt($password),
+            'remember_token' => Str::random(10),
         ]);
 
         // Save password to .env for testing

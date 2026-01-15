@@ -14,8 +14,8 @@ if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "staging" ]; then
     php artisan migrate --force
 
     # Only seed SystemPrompts (required for AI functionality)
-    echo "Seeding SystemPrompts..."
-    php artisan db:seed --class=SystemPromptsSeeder --force
+    # echo "Seeding SystemPrompts..."
+    # php artisan db:seed --class=SystemPromptsSeeder --force
 fi
 
 # Clear and cache config/routes/views for production
