@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Set first WG as active
-        $user->active_wg_id = $wg1->id;
+        $user->active_wg_id = $wg1->wg_id;
         $user->save();
 
         // Create some Issues (Rechtskategorien)
@@ -119,7 +119,7 @@ class DatabaseSeeder extends Seeder
 
         // Create a Case
         $case = CaseModel::create([
-            'wg_id' => $wg1->id,
+            'wg_id' => $wg1->wg_id,
             'created_by_user_id' => $user->id,
             'title' => 'WG-Zuschlag § 38a beantragen',
             'status' => 'IN_PROGRESS',
@@ -131,14 +131,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Attach issues to case
-        $case->issues()->sync([$issue1->id, $issue3->id]);
+        $case->issues()->attach([$issue1->id, $issue3->id]);
 
         // Attach authorities to case
-        $case->authorities()->sync([$auth1->id, $auth2->id]);
+        $case->authorities()->attach([$auth1->id, $auth2->id]);
 
         // Add source evidence
         SourceEvidence::create([
-            'case_id' => $case->id,
+            'case_id' => $case->case_id,
             'issue_id' => $issue1->id,
             'url' => 'https://www.gesetze-im-internet.de/sgb_11/__38a.html',
             'domain' => 'gesetze-im-internet.de',
@@ -155,7 +155,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         SourceEvidence::create([
-            'case_id' => $case->id,
+            'case_id' => $case->case_id,
             'issue_id' => $issue1->id,
             'url' => 'https://www.aok.de/pk/nrw/inhalt/wohngruppe-zuschlag',
             'domain' => 'aok.de',

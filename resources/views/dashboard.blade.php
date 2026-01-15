@@ -4,12 +4,19 @@
         <div class="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-900">
             <div>
                 <h2 class="text-2xl font-bold mb-2">Willkommen, {{ Auth::user()->name }}!</h2>
-                <p class="text-neutral-600 dark:text-neutral-400 mb-2">
-                    WG-ID: <span class="font-mono font-semibold">{{ $wg->id }}</span>
-                </p>
-                <p class="text-neutral-600 dark:text-neutral-400">
-                    WG-Name: <span class="font-semibold">{{ $wg->name }}</span>
-                </p>
+                @if($wg)
+                    <p class="text-neutral-600 dark:text-neutral-400 mb-2">
+                        WG-ID: <span class="font-mono font-semibold">{{ $wg->wg_id }}</span>
+                    </p>
+                    <p class="text-neutral-600 dark:text-neutral-400">
+                        WG-Name: <span class="font-semibold">{{ $wg->wg_name }}</span>
+                    </p>
+                @else
+                    <div class="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-3 py-2 text-amber-900 dark:bg-amber-900/30 dark:text-amber-100">
+                        <span class="font-semibold">Keine WG erfasst</span>
+                        <span class="text-sm">Bitte erst das Formular ausfüllen – danach wird die WG hier gespeichert.</span>
+                    </div>
+                @endif
             </div>
             
             <!-- API Token Button -->
@@ -30,6 +37,20 @@
                 title="WG Formular"
                 allowfullscreen
             ></iframe>
+        </div>
+
+        <!-- Chat Support -->
+        <div class="relative overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-xl font-semibold">Support-Chat</h3>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400">Probleme melden – WG-ID wird automatisch mitgeschickt.</p>
+                </div>
+                @if(!$wg)
+                    <span class="text-xs rounded-lg bg-amber-100 text-amber-900 px-3 py-1 dark:bg-amber-900/30 dark:text-amber-100">Bitte zuerst WG anlegen</span>
+                @endif
+            </div>
+            <div id="n8n-chat" class="min-h-[420px]"></div>
         </div>
     </div>
 
@@ -136,6 +157,8 @@
         </form>
     </dialog>
 
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
     <style>
         .modal {
             position: fixed;
@@ -165,6 +188,30 @@
             color: white;
         }
     </style>
+
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+        const metadata = {
+            @if($wg)
+            wg_id: '{{ $wg->wg_id }}',
+            @endif
+        };
+
+        // Only initialize chat when we have a WG to attach
+        @if($wg)
+        createChat({
+            webhookUrl: 'https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/chat',
+            target: '#n8n-chat',
+            mode: 'window',
+            metadata,
+            loadPreviousSession: true,
+            initialMessages: [
+                'Hi! Beschreibe kurz das Problem – deine WG-ID wird automatisch mitgeschickt.'
+            ],
+        });
+        @endif
+    </script>
 
     <script>
         function openApiTokenModal() {

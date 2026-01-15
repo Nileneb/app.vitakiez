@@ -17,7 +17,8 @@ class CaseController extends Controller
 
         $data = $request->validate([
             'wg_id' => ['nullable','uuid'],
-            'title' => ['required','string','max:255'],
+            'case_title' => ['sometimes','string','max:255'],
+            'title' => ['sometimes','string','max:255'],
             'problem_description' => ['required','string'],
             'priority' => ['nullable','in:LOW,MEDIUM,HIGH,CRITICAL'],
             'status' => ['nullable','in:OPEN,IN_PROGRESS,WAITING,DONE,ARCHIVED'],
@@ -41,12 +42,21 @@ class CaseController extends Controller
         $wgId = $data['wg_id'] ?? $user->active_wg_id;
         if (!$wgId) return response()->json(['message' => 'No wg_id provided and no active WG set'], 422);
 
-        $wg = Wg::where('id', $wgId)->where('owner_user_id', $user->id)->firstOrFail();
+        $wg = Wg::where('wg_id', $wgId)->where('owner_user_id', $user->id)->firstOrFail();
+
+        // Normalize: prefer case_title, fallback to title
+        $caseTitle = $request->input('case_title') ?? $request->input('title');
+        if (!$caseTitle) {
+            return response()->json([
+                'message' => 'The case_title field is required.',
+                'errors' => ['case_title' => ['The case_title field is required.']],
+            ], 422);
+        }
 
         $case = CaseModel::create([
-            'wg_id' => $wg->id,
+            'wg_id' => $wg->wg_id,
             'created_by_user_id' => $user->id,
-            'title' => $data['title'],
+            'case_title' => $caseTitle,
             'problem_description' => $data['problem_description'],
             'priority' => $data['priority'] ?? 'MEDIUM',
             'status' => $data['status'] ?? 'OPEN',

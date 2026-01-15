@@ -18,8 +18,10 @@ class WgController extends Controller
     {
         $user = $request->user();
 
+        // Accept both "name" (old) and "wg_name" (preferred) and normalize to "name"
         $data = $request->validate([
-            'name' => ['required','string','max:255'],
+            'name' => ['sometimes','string','max:255'],
+            'wg_name' => ['sometimes','string','max:255'],
             'state' => ['required','string','max:255'],
             'district' => ['nullable','string','max:255'],
             'municipality' => ['nullable','string','max:255'],
@@ -49,7 +51,32 @@ class WgController extends Controller
             'notes' => ['nullable','string'],
         ]);
 
+        // Normalize: prefer wg_name, fallback to name
+        $wgName = $request->input('wg_name') ?? $request->input('name');
+
+        if (!$wgName) {
+            return response()->json([
+                'message' => 'The wg_name field is required.',
+                'errors' => ['wg_name' => ['The wg_name field is required.']],
+            ], 422);
+        }
+
+        // Conflict check to avoid SQL unique violation (owner_user_id + wg_name)
+        $exists = Wg::where('owner_user_id', $user->id)
+            ->where('wg_name', $wgName)
+            ->exists();
+        if ($exists) {
+            return response()->json([
+                'message' => 'WG name already exists for this user.',
+                'errors' => ['wg_name' => ['WG name already exists for this user.']],
+            ], 409);
+        }
+
+        // Remove alias fields to avoid mass-assignment of non-fillable column
+        unset($data['wg_name'], $data['name']);
+
         $wg = Wg::create(array_merge($data, [
+            'wg_name' => $wgName,
             'owner_user_id' => $user->id,
             'governance' => $data['governance'] ?? 'UNKNOWN',
             'care_provider_mode' => $data['care_provider_mode'] ?? 'UNKNOWN',
@@ -57,7 +84,7 @@ class WgController extends Controller
 
         // Optional: direkt aktiv setzen, wenn noch keine aktive WG existiert
         if (!$user->active_wg_id) {
-            $user->active_wg_id = $wg->id;
+            $user->active_wg_id = $wg->wg_id;
             $user->save();
         }
 
@@ -69,7 +96,7 @@ class WgController extends Controller
         $user = $request->user();
         if (!$user->active_wg_id) return response()->json(null);
 
-        $wg = Wg::where('id', $user->active_wg_id)
+        $wg = Wg::where('wg_id', $user->active_wg_id)
             ->where('owner_user_id', $user->id)
             ->first();
 
@@ -83,13 +110,13 @@ class WgController extends Controller
             'wg_id' => ['required','uuid'],
         ]);
 
-        $wg = Wg::where('id', $data['wg_id'])
+        $wg = Wg::where('wg_id', $data['wg_id'])
             ->where('owner_user_id', $user->id)
             ->firstOrFail();
 
-        $user->active_wg_id = $wg->id;
+        $user->active_wg_id = $wg->wg_id;
         $user->save();
 
-        return response()->json(['active_wg_id' => $wg->id]);
+        return response()->json(['active_wg_id' => $wg->wg_id]);
     }
 }

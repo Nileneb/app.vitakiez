@@ -13,17 +13,26 @@ class CaseModel extends Model
     use HasUuids;
 
     protected $table = 'cases';
+    protected $primaryKey = 'case_id';
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'wg_id','created_by_user_id','title','status','problem_description','priority',
+        'wg_id','created_by_user_id','case_title','status','problem_description','priority',
         'required_docs','next_actions','deadlines','source_links','attachments','last_reviewed_at',
     ];
 
     protected $casts = [
         'last_reviewed_at' => 'datetime',
     ];
+
+    /**
+     * Get the route key name for Laravel route model binding.
+     */
+    public function getRouteKeyName()
+    {
+        return 'case_id';
+    }
 
     public function wg(): BelongsTo
     {

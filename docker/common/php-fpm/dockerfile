@@ -65,6 +65,18 @@ COPY --from=builder /var/www /var/www
 # Copy built frontend assets
 COPY --from=builder /var/www/public/build /var/www/public/build
 
+# Explicitly copy app/ directory to ensure all controllers and models are included
+COPY ./app /var/www/app
+
+# Explicitly copy resources/ directory to ensure all views are included
+COPY ./resources /var/www/resources
+
+# Explicitly copy routes/ directory to ensure all route files are included
+COPY ./routes /var/www/routes
+
+# Explicitly copy database/ directory to ensure migrations and seeders are included
+COPY ./database /var/www/database
+
 # Set working directory
 WORKDIR /var/www
 

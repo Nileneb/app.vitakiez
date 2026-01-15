@@ -20,7 +20,23 @@ class SourceEvidenceController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $data = $request->validate([
+        // Support two formats:
+        // 1. Batch format: { "items": [ {...}, {...} ] }
+        // 2. n8n format: { "url": "...", "text_full": "...", ... } (single item)
+        
+        $input = $request->all();
+        
+        // If 'items' array exists, use it; otherwise wrap single item
+        if (isset($input['items']) && is_array($input['items'])) {
+            $items = $input['items'];
+        } else {
+            // Single-item format from n8n: wrap it
+            $items = [$input];
+        }
+
+        // Validate items
+        $data = ['items' => $items];
+        $validated = validator($data, [
             'items' => ['required','array','min:1','max:50'],
             'items.*.issue_code' => ['nullable','string','max:64'],
             'items.*.url' => ['required','string','max:2048'],
@@ -39,17 +55,17 @@ class SourceEvidenceController extends Controller
             'items.*.text_full' => ['nullable','string'],
             'items.*.text_path' => ['nullable','string','max:2048'],
             'items.*.content_hash' => ['nullable','string','max:128'],
-        ]);
+        ])->validate();
 
         $out = [];
-        foreach ($data['items'] as $it) {
+        foreach ($validated['items'] as $it) {
             $issueId = null;
             if (!empty($it['issue_code'])) {
                 $issueId = Issue::where('code', $it['issue_code'])->value('id');
             }
 
             $record = SourceEvidence::updateOrCreate(
-                ['case_id' => $case->id, 'url' => $it['url']],
+                ['case_id' => $case->case_id, 'url' => $it['url']],
                 [
                     'issue_id' => $issueId,
                     'domain' => $it['domain'] ?? parse_url($it['url'], PHP_URL_HOST),
