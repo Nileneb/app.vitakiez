@@ -24,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->registerObservers();
+    }
+
+    protected function registerObservers(): void
+    {
+        \App\Models\CaseModel::observe(\App\Observers\CaseObserver::class);
     }
 
     protected function configureDefaults(): void

@@ -15,12 +15,13 @@ class DashboardController extends Controller
         $wg = Wg::where('owner_user_id', $user->id)->latest()->first();
         
         // n8n form URL; append wg_id only if one exists (creation happens after form submission)
-        $baseFormUrl = 'https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/n8n-form';
+        $baseFormUrl = config('services.n8n.form_url');
         $formUrl = $wg ? $baseFormUrl . '?wg_id=' . $wg->wg_id : $baseFormUrl;
         
         return view('dashboard', [
             'wg' => $wg,
             'formUrl' => $formUrl,
+            'chatWebhookUrl' => config('services.n8n.chat_url'),
         ]);
     }
 }

@@ -13,13 +13,14 @@ class CaseModel extends Model
     use HasUuids;
 
     protected $table = 'cases';
-    protected $primaryKey = 'case_id';
-    public $incrementing = false;
+    protected $primaryKey = 'id';
     protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
-        'wg_id','created_by_user_id','case_title','status','problem_description','priority',
+        'wg_id','created_by_user_id','case_title','status','problem_description','case_priority',
         'required_docs','next_actions','deadlines','source_links','attachments','last_reviewed_at',
+        'issue_categories','authority_targets','owner',
     ];
 
     protected $casts = [
@@ -31,7 +32,7 @@ class CaseModel extends Model
      */
     public function getRouteKeyName()
     {
-        return 'case_id';
+        return 'id';
     }
 
     public function wg(): BelongsTo

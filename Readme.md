@@ -1,350 +1,264 @@
-# Pflege-WG Rechtsfinder – DB Diagram (aktueller Stand + Zielmodell)
+# Pflege-WG Rechtsfinder – DB Schema (PostgreSQL, aktuell normalisiert)
 
-> Stand: n8n Data Tables (aus Workflow-Export) – Schema abgeleitet aus den aktuell gemappten Spalten. fileciteturn5file0
+> Stand: PostgreSQL Production Schema mit normalisiertem ER-Modell
 
-## Aktuelle Tabellen (n8n Data Tables)
+## Aktuelle Tabellen (PostgreSQL)
 
-Hinweis: In n8n existiert zusätzlich i. d. R. eine interne Row-ID (z. B. `id`) je Tabelle, die im Schema-Mapping nicht immer sichtbar ist.
+### wgs
 
-## wg_profile
+| Spalte | Typ | Constraint |
+|--------|-----|------------|
+| `wg_id` | UUID | PK |
+| `wg_name` | VARCHAR | |
+| `address_text` | TEXT | |
+| `state` | VARCHAR | |
+| `district` | VARCHAR | |
+| `municipality` | VARCHAR | |
+| `governance` | VARCHAR | |
+| `residents_total` | INTEGER | |
+| `residents_with_pg` | INTEGER | |
+| `target_group` | VARCHAR | |
+| `has_24h_presence` | BOOLEAN | |
+| `has_presence_staff` | BOOLEAN | |
+| `care_provider_mode` | VARCHAR | |
+| `lease_individual` | BOOLEAN | |
+| `care_individual` | BOOLEAN | |
+| `bundle_housing_care` | BOOLEAN | |
+| `sgb_xi_used` | BOOLEAN | |
+| `sgb_xii_involved` | BOOLEAN | |
+| `sgb_v_hkp` | BOOLEAN | |
+| `landesrecht_title` | VARCHAR | |
+| `landesrecht_url` | VARCHAR | |
+| `heimaufsicht_contact_hint` | TEXT | |
+| `notes` | TEXT | |
+| `created_at` | TIMESTAMPTZ | |
+| `updated_at` | TIMESTAMPTZ | |
 
-| Spalte                      | Typ        |
-| --------------------------- | ---------- |
-| `wg_id`                     | `string`   |
-| `wg_name`                   | `string`   |
-| `address_text`              | `string`   |
-| `state`                     | `string`   |
-| `district`                  | `string`   |
-| `municipality`              | `string`   |
-| `governance`                | `string`   |
-| `residents_total`           | `number`   |
-| `residents_with_pg`         | `number`   |
-| `target_group`              | `string`   |
-| `has_24h_presence`          | `boolean`  |
-| `has_presence_staff`        | `boolean`  |
-| `care_provider_mode`        | `string`   |
-| `lease_individual`          | `boolean`  |
-| `care_individual`           | `boolean`  |
-| `bundle_housing_care`       | `boolean`  |
-| `sgb_xi_used`               | `boolean`  |
-| `sgb_xii_involved`          | `boolean`  |
-| `sgb_v_hkp`                 | `boolean`  |
-| `landesrecht_title`         | `string`   |
-| `landesrecht_url`           | `string`   |
-| `heimaufsicht_contact_hint` | `string`   |
-| `notes`                     | `string`   |
-| `created_at`                | `dateTime` |
-| `updated_at`                | `dateTime` |
+### cases
 
-## case_profile
+| Spalte | Typ | Constraint | Beschreibung |
+|--------|-----|-----------|---------|
+| `case_id` | UUID | PK | Eindeutige Case-ID |
+| `wg_id` | UUID | FK → wgs | Welche WG |
+| `created_by_user_id` | BIGINT | FK → users | Wer hat es erstellt |
+| `case_title` | VARCHAR | NOT NULL | |
+| `status` | VARCHAR | ENUM (OPEN,IN_PROGRESS,WAITING,DONE,ARCHIVED) | |
+| `problem_description` | TEXT | NOT NULL | |
+| `priority` | VARCHAR | ENUM (LOW,MEDIUM,HIGH,CRITICAL) | |
+| `required_docs` | TEXT | NULL | Semikolon-separiert oder JSON |
+| `next_actions` | TEXT | NULL | |
+| `deadlines` | TEXT | NULL | |
+| `source_links` | TEXT | NULL | |
+| `attachments` | TEXT | NULL | |
+| `last_reviewed_at` | TIMESTAMPTZ | NULL | |
+| `created_at` | TIMESTAMPTZ | | |
+| `updated_at` | TIMESTAMPTZ | | |
 
-| Spalte                | Typ        |
-| --------------------- | ---------- |
-| `case_id`             | `string`   |
-| `wg_id`               | `string`   |
-| `case_title`          | `string`   |
-| `status`              | `string`   |
-| `problem_description` | `string`   |
-| `issue_categories`    | `string`   |
-| `authority_targets`   | `string`   |
-| `required_docs`       | `string`   |
-| `next_actions`        | `string`   |
-| `deadlines`           | `string`   |
-| `source_links`        | `string`   |
-| `attachments`         | `string`   |
-| `case_priority`       | `string`   |
-| `owner`               | `string`   |
-| `created_at`          | `dateTime` |
-| `updated_at`          | `dateTime` |
-| `last_reviewed_at`    | `dateTime` |
+### issues
 
-## source_evidence
+| Spalte | Typ | Constraint | Beschreibung |
+|--------|-----|-----------|---------|
+| `id` | UUID | PK | |
+| `code` | VARCHAR | UNIQUE | z.B. "HOUSING_38A" |
+| `name` | VARCHAR | NOT NULL | |
+| `description` | TEXT | | |
+| `default_authority_targets` | TEXT | | |
+| `default_required_docs` | TEXT | | |
+| `default_next_actions` | TEXT | | |
+| `default_source_links` | TEXT | | |
+| `rule_hints` | TEXT | | |
+| `created_at` | TIMESTAMPTZ | | |
+| `updated_at` | TIMESTAMPTZ | | |
 
-| Spalte                | Typ        |
-| --------------------- | ---------- |
-| `case_id`             | `string`   |
-| `issue_code`          | `string`   |
-| `url`                 | `string`   |
-| `domain`              | `string`   |
-| `title`               | `string`   |
-| `source_type`         | `string`   |
-| `jurisdiction_scope`  | `string`   |
-| `evidence_excerpt`    | `string`   |
-| `claim_supported`     | `string`   |
-| `authority_score`     | `number`   |
-| `relevance_score`     | `number`   |
-| `jurisdiction_score`  | `number`   |
-| `total_score`         | `number`   |
-| `http_status`         | `number`   |
-| `checked_at`          | `dateTime` |
-| `selected`            | `boolean`  |
-| `Text_Full`           | `string`   |
-| `wg_id`               | `string`   |
-| `case_title`          | `string`   |
-| `status`              | `string`   |
-| `problem_description` | `string`   |
-| `issue_categories`    | `string`   |
-| `authority_targets`   | `string`   |
-| `required_docs`       | `string`   |
-| `next_actions`        | `string`   |
+### authorities
 
-## Beziehungen (Ist-Zustand)
+| Spalte | Typ | Constraint |
+|--------|-----|-----------|
+| `id` | UUID | PK |
+| `name` | VARCHAR | NOT NULL |
+| `authority_type` | VARCHAR | |
+| `jurisdiction_scope` | VARCHAR | |
+| `jurisdiction_state` | VARCHAR | |
+| `contact_info` | TEXT | |
+| `created_at` | TIMESTAMPTZ | |
+| `updated_at` | TIMESTAMPTZ | |
 
--   `case_profile.wg_id` → referenziert `wg_profile.wg_id`.
+### source_evidence
 
--   `source_evidence.case_id` → referenziert `case_profile.case_id`.
+| Spalte | Typ | Constraint | Beschreibung |
+|--------|-----|-----------|---------|
+| `id` | UUID | PK | |
+| `case_id` | UUID | FK → cases | |
+| `issue_id` | UUID | FK → issues (NULL) | |
+| `url` | VARCHAR | NOT NULL | |
+| `domain` | VARCHAR | | |
+| `source_type` | VARCHAR | ENUM | OFFICIAL, LAW, AUTHORITY, etc. |
+| `jurisdiction_scope` | VARCHAR | ENUM | FEDERAL, STATE, EU, etc. |
+| `title` | TEXT | | |
+| `evidence_excerpt` | TEXT | | |
+| `claim_supported` | TEXT | | |
+| `authority_score` | SMALLINT | 0-100 | |
+| `relevance_score` | SMALLINT | 0-100 | |
+| `jurisdiction_score` | SMALLINT | 0-100 | |
+| `total_score` | SMALLINT | 0-100 | |
+| `http_status` | SMALLINT | | z.B. 200, 404 |
+| `checked_at` | TIMESTAMPTZ | | |
+| `selected` | BOOLEAN | DEFAULT false | Vom User ausgewählt? |
+| `text_full` | LONGTEXT | | Volltext für RAG |
+| `text_path` | VARCHAR | | |
+| `content_hash` | VARCHAR | UNIQUE per case+url | |
+| `created_at` | TIMESTAMPTZ | | |
+| `updated_at` | TIMESTAMPTZ | | |
 
--   `source_evidence.issue_code` → referenziert konzeptionell `issue_catalog.issue_code` (aktuell: freies Stringfeld).
+### case_issue (Join-Tabelle)
 
--   `case_profile.issue_categories` und `case_profile.authority_targets` sind aktuell **Semikolon-Strings** (keine echten Relations-Tabellen).
+| Spalte | Typ | Constraint |
+|--------|-----|-----------|
+| `case_id` | UUID | FK → cases, PK |
+| `issue_id` | UUID | FK → issues, PK |
+| `created_at` | TIMESTAMPTZ | |
+| `updated_at` | TIMESTAMPTZ | |
 
-## ER-Diagramm (Ist-Zustand)
+### case_authority (Join-Tabelle)
+
+| Spalte | Typ | Constraint |
+|--------|-----|-----------|
+| `case_id` | UUID | FK → cases, PK |
+| `authority_id` | UUID | FK → authorities, PK |
+| `created_at` | TIMESTAMPTZ | |
+| `updated_at` | TIMESTAMPTZ | |
+
+## Beziehungen
+
+- `cases.wg_id` → `wgs.wg_id` (1:N)
+- `cases.created_by_user_id` → `users.id` (N:1)
+- `source_evidence.case_id` → `cases.case_id` (N:1)
+- `source_evidence.issue_id` → `issues.id` (N:1, nullable)
+- `case_issue.case_id` → `cases.case_id` (M:N via Join)
+- `case_issue.issue_id` → `issues.id` (M:N via Join)
+- `case_authority.case_id` → `cases.case_id` (M:N via Join)
+- `case_authority.authority_id` → `authorities.id` (M:N via Join)
+
+## ER-Diagramm (Aktueller Stand)
 
 ```mermaid
 erDiagram
-
-  WG_PROFILE {
-
-    STRING wg_id
-
-    STRING wg_name
-
-    STRING address_text
-
-    STRING state
-
-    STRING district
-
-    STRING municipality
-
-    STRING governance
-
-    NUMBER residents_total
-
-    NUMBER residents_with_pg
-
-    STRING target_group
-
-    BOOLEAN has_24h_presence
-
-    BOOLEAN has_presence_staff
-
-    STRING care_provider_mode
-
-    BOOLEAN lease_individual
-
-    BOOLEAN care_individual
-
-    BOOLEAN bundle_housing_care
-
-    BOOLEAN sgb_xi_used
-
-    BOOLEAN sgb_xii_involved
-
-    BOOLEAN sgb_v_hkp
-
-    STRING landesrecht_title
-
-    STRING landesrecht_url
-
-    STRING heimaufsicht_contact_hint
-
-    STRING notes
-
-    DATETIME created_at
-
-    DATETIME updated_at
-
-  }
-
-  CASE_PROFILE {
-
-    STRING case_id
-
-    STRING wg_id
-
-    STRING case_title
-
-    STRING status
-
-    STRING problem_description
-
-    STRING issue_categories
-
-    STRING authority_targets
-
-    STRING required_docs
-
-    STRING next_actions
-
-    STRING deadlines
-
-    STRING source_links
-
-    STRING attachments
-
-    STRING case_priority
-
-    STRING owner
-
-    DATETIME created_at
-
-    DATETIME updated_at
-
-    DATETIME last_reviewed_at
-
-  }
-
-  SOURCE_EVIDENCE {
-
-    STRING case_id
-
-    STRING issue_code
-
-    STRING url
-
-    STRING domain
-
-    STRING title
-
-    STRING source_type
-
-    STRING jurisdiction_scope
-
-    STRING evidence_excerpt
-
-    STRING claim_supported
-
-    NUMBER authority_score
-
-    NUMBER relevance_score
-
-    NUMBER jurisdiction_score
-
-    NUMBER total_score
-
-    NUMBER http_status
-
-    DATETIME checked_at
-
-    BOOLEAN selected
-
-    STRING Text_Full
-
-    STRING wg_id
-
-    STRING case_title
-
-    STRING status
-
-    STRING problem_description
-
-    STRING issue_categories
-
-    STRING authority_targets
-
-    STRING required_docs
-
-    STRING next_actions
-
-  }
-
-
-  WG_PROFILE ||--o{ CASE_PROFILE : wg_id
-
-  CASE_PROFILE ||--o{ SOURCE_EVIDENCE : case_id
-
+    USERS ||--o{ CASES : creates
+    WGS ||--o{ CASES : has
+    CASES ||--o{ CASE_ISSUE : contains
+    CASES ||--o{ CASE_AUTHORITY : involves
+    CASES ||--o{ SOURCE_EVIDENCE : contains
+    ISSUES ||--o{ CASE_ISSUE : "referenced by"
+    ISSUES ||--o{ SOURCE_EVIDENCE : "mentioned in"
+    AUTHORITIES ||--o{ CASE_AUTHORITY : "assigned to"
+
+    WGS {
+        uuid wg_id PK
+        string wg_name
+        string state
+        string governance
+    }
+
+    USERS {
+        bigint id PK
+        string name
+        string email
+        uuid active_wg_id FK
+    }
+
+    CASES {
+        uuid case_id PK
+        uuid wg_id FK
+        bigint created_by_user_id FK
+        string case_title
+        string status
+        text problem_description
+        string priority
+        text required_docs
+        text next_actions
+        text deadlines
+        text source_links
+        text attachments
+        timestamptz last_reviewed_at
+    }
+
+    ISSUES {
+        uuid id PK
+        string code
+        string name
+        text description
+        text default_authority_targets
+        text default_required_docs
+        text default_next_actions
+        text default_source_links
+    }
+
+    AUTHORITIES {
+        uuid id PK
+        string name
+        string authority_type
+        string jurisdiction_scope
+        string jurisdiction_state
+    }
+
+    SOURCE_EVIDENCE {
+        uuid id PK
+        uuid case_id FK
+        uuid issue_id FK
+        string url
+        string domain
+        string source_type
+        string jurisdiction_scope
+        text title
+        text evidence_excerpt
+        int authority_score
+        int relevance_score
+        int total_score
+        boolean selected
+        text text_full
+    }
+
+    CASE_ISSUE {
+        uuid case_id FK
+        uuid issue_id FK
+    }
+
+    CASE_AUTHORITY {
+        uuid case_id FK
+        uuid authority_id FK
+    }
 ```
 
-# Zielmodell (PSQL/normalisiert) – Empfehlung
+## n8n Integration – Direktzugriff auf PostgreSQL
 
-Ziel: Strings wie `issue_categories`/`authority_targets` in echte M:N-Relationen überführen und Evidence/RAG sauber versionieren.
+Statt Webhooks: n8n schreibt direkt in PostgreSQL für höhere Zuverlässigkeit.
 
-## Empfohlene Normalisierung
+### Node-Konfiguration "Insert or update rows in a table"
 
--   `issue_catalog(issue_code PK)` und `authority_directory(authority_id PK)` werden echte Referenztabellen.
+**Für Cases:**
+- **Schema:** `public`
+- **Table:** `cases`
+- **Match columns:** `case_id`
+- **Mapping:** case_id, wg_id, created_by_user_id, case_title, status, problem_description, priority, required_docs, next_actions, deadlines, source_links, attachments
 
--   `case_issue(case_id, issue_code)` als Join-Tabelle.
+**Für Issues-Zuordnung (nach Case-Insert):**
+- **Schema:** `public`
+- **Table:** `case_issue`
+- **Match columns:** `case_id`, `issue_id`
+- **Insert:** `{ "case_id": "...", "issue_id": "..." }`
 
--   `case_authority(case_id, authority_id|authority_type)` als Join-Tabelle.
+**Für Evidence:**
+- **Schema:** `public`
+- **Table:** `source_evidence`
+- **Match columns:** `case_id`, `url`
+- **Mapping:** case_id, issue_id, url, domain, source_type, jurisdiction_scope, title, evidence_excerpt, authority_score, relevance_score, jurisdiction_score, total_score, selected, text_full
 
--   `source_evidence` wird schlanker: enthält FK auf `case_id` + `issue_code` + `url` und die Scores + Volltext/Dateipfad.
+### Postgres Credentials in n8n
 
--   Optional: `evidence_document` (Text/PDF, Hash, fetched_at, storage_path) und `evidence_chunk` (für RAG/Embeddings).
-
-## ER-Diagramm (Zielmodell, Vorschlag)
-
-```mermaid
-erDiagram
-
-  wg_profile ||--o{ case_profile : wg_id
-
-  issue_catalog ||--o{ case_issue : issue_code
-
-  case_profile ||--o{ case_issue : case_id
-
-  authority_directory ||--o{ case_authority : authority_id
-
-  case_profile ||--o{ case_authority : case_id
-
-  case_profile ||--o{ source_evidence : case_id
-
-  issue_catalog ||--o{ source_evidence : issue_code
-
-
-  wg_profile {
-    string wg_id PK
-    string wg_name
-    string state
-    string governance
-  }
-
-  case_profile {
-    string case_id PK
-    string wg_id FK
-    string status
-    string problem_description
-    string case_priority
-    datetime created_at
-  }
-
-  issue_catalog {
-    string issue_code PK
-    string issue_name
-  }
-
-  authority_directory {
-    string authority_id PK
-    string authority_type
-    string name
-    string jurisdiction_state
-  }
-
-  case_issue {
-    string case_id FK
-    string issue_code FK
-  }
-
-  case_authority {
-    string case_id FK
-    string authority_id FK
-  }
-
-  source_evidence {
-    string case_id FK
-    string issue_code FK
-    string url
-    string domain
-    string source_type
-    string jurisdiction_scope
-    int authority_score
-    int relevance_score
-    int jurisdiction_score
-    int total_score
-    int http_status
-    datetime checked_at
-    boolean selected
-    string text_full
-  }
-
+```
+Host: (dein n8n Netzwerk zu Postgres, z.B. postgres oder hostname)
+Port: 5432
+Database: laravel
+User: vitakiez
+Password: [DB_PASSWORD aus .env]
 ```

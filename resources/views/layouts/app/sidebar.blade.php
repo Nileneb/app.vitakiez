@@ -18,17 +18,9 @@
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
-            <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Settings')" class="grid">
-                    <flux:sidebar.item icon="key" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>
-                        {{ __('Profile') }}
-                    </flux:sidebar.item>
-                </flux:sidebar.group>
-            </flux:sidebar.nav>
-
             <flux:spacer />
-
-            <flux:sidebar.nav>
+            
+            <flux:sidebar.group :heading="__('Resources')" class="grid">
                 <flux:sidebar.item icon="folder-git-2" href="https://github.com/nileneb/app.vitakiez" target="_blank">
                     {{ __('Repository') }}
                 </flux:sidebar.item>
@@ -36,7 +28,7 @@
                 <flux:sidebar.item icon="book-open-text" href="https://www.linn.games" target="_blank">
                     {{ __('Games') }}
                 </flux:sidebar.item>
-            </flux:sidebar.nav>
+            </flux:sidebar.group>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>

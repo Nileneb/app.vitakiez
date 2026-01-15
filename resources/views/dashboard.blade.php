@@ -199,9 +199,9 @@
         };
 
         // Only initialize chat when we have a WG to attach
-        @if($wg)
+        @if($wg && $chatWebhookUrl)
         createChat({
-            webhookUrl: 'https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/chat',
+            webhookUrl: '{{ $chatWebhookUrl }}',
             target: '#n8n-chat',
             mode: 'window',
             metadata,
