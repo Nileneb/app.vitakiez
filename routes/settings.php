@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiTokenUiController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -7,6 +8,17 @@ Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::livewire('settings/profile', 'pages::settings.profile')->name('profile.edit');
+    
+    // API Tokens - using Blade view instead of Livewire for simplicity
+    Route::get('settings/api-tokens', function () {
+        return view('pages.settings.api-tokens');
+    })->name('api-tokens.show');
+
+    // API Token management
+    Route::post('settings/api-tokens', [ApiTokenUiController::class, 'create'])
+        ->name('settings.api-tokens.create');
+    Route::delete('settings/api-tokens/{tokenId}', [ApiTokenUiController::class, 'revoke'])
+        ->name('settings.api-tokens.revoke');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
