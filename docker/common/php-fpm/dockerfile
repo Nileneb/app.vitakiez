@@ -5,6 +5,7 @@ FROM php:8.4-fpm AS builder
 # Some dependencies are required for PHP extensions only in the build stage
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    git \
     unzip \
     libpq-dev \
     libonig-dev \
@@ -36,7 +37,7 @@ COPY . /var/www
 
 # Install Composer and dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+    && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist --prefer-source
 
 # Build frontend assets (Vite production build)
 RUN npm install && npm run build

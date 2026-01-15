@@ -62,6 +62,10 @@ new class extends Component {
         Session::flash('status', 'verification-link-sent');
     }
 
+    /**
+     * Determine whether the current user has an unverified email address,
+     * used to conditionally display the email verification prompt.
+     */
     #[Computed]
     public function hasUnverifiedEmail(): bool
     {
