@@ -11,6 +11,37 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
+                <!-- WG Selection Dropdown -->
+                @if(isset($wgs) && $wgs->count() > 0)
+                    <flux:sidebar.group :heading="__('Pflege-WG')" class="grid">
+                        <flux:dropdown>
+                            <flux:button variant="subtle" class="w-full justify-between" icon="folder">
+                                <span class="truncate">{{ $wg?->wg_name ?? __('Keine WG') }}</span>
+                            </flux:button>
+
+                            <flux:menu>
+                                @foreach($wgs as $w)
+                                    <flux:menu.item
+                                        onclick="fetch('/wgs/active', {
+                                            method: 'POST',
+                                            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                                            body: JSON.stringify({wg_id: '{{ $w->wg_id }}'})
+                                        }).then(() => location.reload())"
+                                        class="cursor-pointer"
+                                    >
+                                        <div class="flex items-center justify-between w-full">
+                                            <span>{{ $w->wg_name }}</span>
+                                            @if($w->wg_id === $wg?->wg_id)
+                                                <flux:icon icon="check" class="text-blue-600" />
+                                            @endif
+                                        </div>
+                                    </flux:menu.item>
+                                @endforeach
+                            </flux:menu>
+                        </flux:dropdown>
+                    </flux:sidebar.group>
+                @endif
+
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}

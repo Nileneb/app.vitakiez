@@ -11,15 +11,18 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         
-        // Only fetch an existing WG; do NOT pre-create before the form is submitted
-        $wg = Wg::where('owner_user_id', $user->id)->latest()->first();
+        // Alle WGs des Users (für Dropdown/Auswahl)
+        $wgs = Wg::where('owner_user_id', $user->id)->get();
         
-        // n8n form URL; append wg_id only if one exists (creation happens after form submission)
+        // Aktive WG (oder letzte)
+        $wg = $user->activeWg ?? $wgs->first();
+        
         $baseFormUrl = config('services.n8n.form_url');
         $formUrl = $wg ? $baseFormUrl . '?wg_id=' . $wg->wg_id : $baseFormUrl;
         
         return view('dashboard', [
-            'wg' => $wg,
+            'wgs' => $wgs,        // ← Alle WGs zum Auswählen
+            'wg' => $wg,          // ← Aktuell ausgewählte
             'formUrl' => $formUrl,
             'chatWebhookUrl' => config('services.n8n.chat_url'),
         ]);

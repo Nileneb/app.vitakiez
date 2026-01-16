@@ -11,6 +11,9 @@ Route::post('/auth/token', [AuthTokenController::class, 'issueToken']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/wgs', [WgController::class, 'index']);
     Route::post('/wgs', [WgController::class, 'store']);
+    Route::get('/wgs/{wg}', [WgController::class, 'show']);           // ← READ
+    Route::put('/wgs/{wg}', [WgController::class, 'update']);         // ← UPDATE
+    Route::delete('/wgs/{wg}', [WgController::class, 'destroy']);     // ← DELETE (bonus)
 
     Route::get('/wgs/active', [WgController::class, 'getActive']);
     Route::post('/wgs/active', [WgController::class, 'setActive']);
