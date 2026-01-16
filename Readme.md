@@ -4,6 +4,23 @@
 
 ## Aktuelle Tabellen (PostgreSQL)
 
+### users
+
+| Spalte | Typ | Constraint |
+|--------|-----|------------|
+| `id` | BIGINT | PK, AUTO_INCREMENT |
+| `name` | VARCHAR | NOT NULL |
+| `email` | VARCHAR | UNIQUE, NOT NULL |
+| `email_verified_at` | TIMESTAMPTZ | NULL |
+| `password` | VARCHAR | NOT NULL |
+| `remember_token` | VARCHAR(100) | NULL |
+| `active_wg_id` | UUID | FK → wgs, NULL |
+| `two_factor_secret` | TEXT | NULL |
+| `two_factor_recovery_codes` | TEXT | NULL |
+| `two_factor_confirmed_at` | TIMESTAMPTZ | NULL |
+| `created_at` | TIMESTAMPTZ | |
+| `updated_at` | TIMESTAMPTZ | |
+
 ### wgs
 
 | Spalte | Typ | Constraint |
@@ -229,9 +246,6 @@ erDiagram
     }
 ```
 
-## n8n Integration – Direktzugriff auf PostgreSQL
-
-+ Webhooks: n8n schreibt direkt in PostgreSQL Webhooks als backup
 
 ### Node-Konfiguration "Insert or update rows in a table"
 
