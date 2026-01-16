@@ -142,6 +142,7 @@
 ## ER-Diagramm (Aktueller Stand)
 
 ```mermaid
+erDiagram
     USERS ||--o{ CASES : creates
     WGS ||--o{ CASES : has
     CASES ||--o{ CASE_ISSUE : contains
