@@ -207,7 +207,7 @@
             metadata,
             loadPreviousSession: true,
             initialMessages: [
-                'Hi! Beschreibe kurz das Problem – deine WG-ID wird automatisch mitgeschickt.'
+                'Hi! Beschreibe kurz das Problem.'
             ],
         });
         @endif

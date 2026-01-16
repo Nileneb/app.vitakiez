@@ -142,7 +142,7 @@
 ## ER-Diagramm (Aktueller Stand)
 
 ```mermaid
-erDiagram
+
     USERS ||--o{ CASES : creates
     WGS ||--o{ CASES : has
     CASES ||--o{ CASE_ISSUE : contains
@@ -231,7 +231,7 @@ erDiagram
 
 ## n8n Integration – Direktzugriff auf PostgreSQL
 
-Statt Webhooks: n8n schreibt direkt in PostgreSQL für höhere Zuverlässigkeit.
++ Webhooks: n8n schreibt direkt in PostgreSQL Webhooks als backup
 
 ### Node-Konfiguration "Insert or update rows in a table"
 
