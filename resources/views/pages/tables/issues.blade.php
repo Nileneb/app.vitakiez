@@ -8,7 +8,7 @@
                     <p class="text-neutral-600 dark:text-neutral-400">Katalog häufiger rechtlicher Probleme im
                         Pflegebereich</p>
                 </div>
-                <a href="#"
+                <a href="{{ route('issues.create') }}"
                     class="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium transition-colors">
                     + Neues Problem
                 </a>
@@ -35,15 +35,21 @@
                                 <td class="px-6 py-4 font-mono text-sm font-medium">{{ $issue->code }}</td>
                                 <td class="px-6 py-4 font-medium">{{ $issue->name }}</td>
                                 <td class="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400">
-                                    {{ Str::limit($issue->description, 60) }}</td>
+                                    {{ Str::limit($issue->description, 60) }}
+                                </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="#"
+                                        <a href="{{ route('issues.show', $issue->id) }}"
                                             class="px-3 py-2 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-100 rounded transition-colors">Details</a>
-                                        <a href="#"
+                                        <a href="{{ route('issues.edit', $issue->id) }}"
                                             class="px-3 py-2 text-sm bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 dark:text-amber-100 rounded transition-colors">Bearbeiten</a>
-                                        <button
-                                            class="px-3 py-2 text-sm bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-100 rounded transition-colors">Löschen</button>
+                                        <form method="POST" action="{{ route('issues.destroy', $issue->id) }}" class="inline"
+                                            onsubmit="return confirm('Wirklich löschen?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="px-3 py-2 text-sm bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-100 rounded transition-colors">Löschen</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

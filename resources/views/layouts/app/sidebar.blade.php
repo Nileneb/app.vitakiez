@@ -24,11 +24,10 @@
 
                         <flux:menu>
                             @foreach($wgs as $w)
-                                <flux:menu.item onclick="fetch('/wgs/active', {
-                                                    method: 'POST',
-                                                    headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                                                    body: JSON.stringify({wg_id: '{{ $w->wg_id }}'})
-                                                }).then(() => location.reload())" class="cursor-pointer">
+                                <flux:menu.item onclick="fetch('{{ route('wgs.activate', $w->wg_id) }}', {
+                                                            method: 'PATCH',
+                                                            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'}
+                                                        }).then(() => location.reload())" class="cursor-pointer">
                                     <div class="flex items-center justify-between w-full">
                                         <span>{{ $w->wg_name }}</span>
                                         @if($w->wg_id === $wg?->wg_id)

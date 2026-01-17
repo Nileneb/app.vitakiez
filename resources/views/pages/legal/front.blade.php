@@ -1,560 +1,78 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pflege-WG Rechtsfinder</title>
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-    <style>
-        @layer theme {
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-            :root,
-            :host {
-                --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-                --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    <!-- SEO Meta Tags -->
+    <title>
+        VitaKiez - Familiäre Pflege-WG in Berlin-Neukölln | Wohnen mit Herz
+    </title>
+    <meta name="description"
+        content="VitaKiez bietet aktiven Senior:innen eine familiäre Pflege-WG in Berlin-Neukölln. Individuelle Betreuung, Gesundheitsförderung und professionelle Pflege in kleinem Rahmen. Jetzt Platz sichern!" />
+    <meta name="keywords"
+        content="Pflege-WG Berlin, Senioren-WG Neukölln, Betreutes Wohnen Berlin, Palliative Care, Gesundheitsförderung, Alten-WG, Pflege Berlin" />
+    <meta name="author" content="Benedikt Linn, VitaKiez" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.vitakiez.de/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.vitakiez.de/" />
+    <meta property="og:title" content="VitaKiez - Familiäre Pflege-WG in Berlin-Neukölln" />
+    <meta property="og:description"
+        content="Wohnen mit Herz und professioneller Betreuung. Individuelle Pflege in familiärem Rahmen für aktive Senior:innen in Berlin." />
+    <meta property="og:image" content="https://www.vitakiez.de/images/hero-header-optimized.jpg" />
+    <meta property="og:locale" content="de_DE" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.vitakiez.de/" />
+    <meta name="twitter:title" content="VitaKiez - Familiäre Pflege-WG in Berlin" />
+    <meta name="twitter:description" content="Wohnen mit Herz und professioneller Betreuung in Berlin-Neukölln" />
+    <meta name="twitter:image" content="https://www.vitakiez.de/images/hero-header-optimized.jpg" />
+
+    <link rel="icon" type="image/svg+xml" href="images/vitakiez_logo.svg" />
+    <link rel="stylesheet" href="/resources/css/app.css" />
+    <link rel="author" type="text/plain" href="humans.txt" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "VitaKiez",
+                "description": "Familiäre Pflege-WG für aktive Senior:innen in Berlin-Neukölln",
+                "url": "https://www.vitakiez.de",
+                "logo": "https://www.vitakiez.de/images/vitakiez_logo.svg",
+                "image": "https://www.vitakiez.de/images/hero-header-optimized.jpg",
+                "email": "info@vitakiez.de",
+                "telephone": "+4915566367968",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Erzbergerstraße 9a",
+                    "addressLocality": "Lampertheim",
+                    "postalCode": "68623",
+                    "addressCountry": "DE"
+                },
+                "founder": {
+                    "@type": "Person",
+                    "name": "Benedikt Linn",
+                    "jobTitle": "Bachelor of Arts - Pflege & Gesundheitsförderung"
+                },
+                "areaServed": {
+                    "@type": "City",
+                    "name": "Berlin"
+                },
+                "serviceType": "Betreutes Wohnen, Pflege-WG, Palliative Care"
             }
-        }
-
-        /* Inline landing styles (based on restored styles.css) */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation - oben sticky */
-        nav {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-        }
-
-        nav .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        nav .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        nav .brand img.logo {
-            height: 36px;
-            width: auto;
-            display: block;
-        }
-
-        nav .brand .brand-name {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav ul li {
-            margin: 0 25px;
-        }
-
-        nav ul li a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1em;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #764ba2;
-        }
-
-        /* Hero Header - clean ohne Overlay */
-        header.hero-section {
-            position: relative;
-            color: white;
-            padding: 0;
-            text-align: center;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-bottom: 8px solid #667eea;
-        }
-
-        .hero-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-        }
-
-        header.hero-section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(102, 126, 234, 0.3);
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            padding: 80px 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header.hero-section h1 {
-            font-size: 4em;
-            margin-bottom: 20px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
-            animation: fadeInDown 1s;
-            line-height: 1.2;
-        }
-
-        header.hero-section p {
-            font-size: 1.3em;
-            margin-bottom: 35px;
-            font-weight: 400;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 1s;
-            line-height: 1.5;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 16px 40px;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            animation: fadeIn 1.5s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            background: #667eea;
-            color: white;
-        }
-
-        /* Sections */
-        section {
-            padding: 80px 0;
-        }
-
-        section h2 {
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-            color: #667eea;
-        }
-
-        .vision {
-            background: #f8f9fa;
-        }
-
-        .vision-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            font-size: 1.2em;
-            line-height: 1.8;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-
-        /* Pricing */
-        .pricing {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .pricing h2 {
-            color: white;
-        }
-
-        .pricing-card {
-            background: white;
-            color: #333;
-            padding: 50px;
-            border-radius: 15px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .price {
-            font-size: 3em;
-            color: #667eea;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin: 30px 0;
-        }
-
-        .pricing-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .pricing-features li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        /* Team */
-        .team-profile {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .team-profile h3 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        .profile-image {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 30px;
-            border: 5px solid #667eea;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .credentials {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .credentials ul {
-            list-style: none;
-        }
-
-        .credentials li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-        }
-
-        .credentials li:before {
-            content: "🎓";
-            position: absolute;
-            left: 0;
-        }
-
-        /* Waitlist Form */
-        .waitlist {
-            background: #f8f9fa;
-        }
-
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-tabs {
-            display: flex;
-            margin-bottom: 30px;
-        }
-
-        .tab-button {
-            flex: 1;
-            padding: 15px;
-            background: white;
-            border: 2px solid #667eea;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s;
-        }
-
-        .tab-button.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .submit-button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .submit-button:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Success Message */
-        .success-message {
-            display: none;
-            background: #22c55e;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        /* Footer */
-        footer {
-            background: #111827;
-            color: white;
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        /* Statistics */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 50px 0;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-            font-size: 2.5em;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        .stat-label {
-            color: #666;
-            margin-top: 10px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header.hero-section {
-                min-height: 70vh;
-            }
-
-            header.hero-section h1 {
-                font-size: 2.5em;
-            }
-
-            header.hero-section p {
-                font-size: 1.1em;
-            }
-
-            .cta-button {
-                padding: 14px 35px;
-                font-size: 0.95em;
-            }
-
-            nav ul li {
-                margin: 0 15px;
-            }
-
-            nav ul li a {
-                font-size: 0.95em;
-            }
-
-            nav .container {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            nav ul {
-                justify-content: center;
-            }
-
-            .form-tabs {
-                flex-direction: column;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-    @vite(['/resources/css/app.css', '/resources/js/app.js'])
+        </script>
 </head>
 
 <body>
-    <!-- Combined Navigation -->
+    <!-- Navigation - sticky oben -->
     <nav>
         <div class="container">
             <div class="brand">
-                <img src="{{ asset('images/logo.svg') }}" alt="VitaKiez" class="logo" />
+                <img src="images/logo.svg" alt="VitaKiez" class="logo" />
             </div>
             <ul>
                 <li><a href="#vision">Vision</a></li>
@@ -562,26 +80,14 @@
                 <li><a href="#preise">Preise</a></li>
                 <li><a href="#team">Team</a></li>
                 <li><a href="#waitlist">Warteliste</a></li>
-                @if (Route::has('login'))
-                    @auth
-                        <li><a href="{{ url('/dashboard') }}"
-                                style="border: 2px solid #667eea; padding: 8px 16px; border-radius: 5px;">Dashboard</a></li>
-                    @else
-                        <li><a href="{{ route('login') }}">Log in</a></li>
-                        @if (Route::has('register'))
-                            <li><a href="{{ route('register') }}"
-                                    style="border: 2px solid #667eea; padding: 8px 16px; border-radius: 5px;">Register</a></li>
-                        @endif
-                    @endauth
-                @endif
             </ul>
         </div>
     </nav>
 
     <!-- Hero Header -->
-    <header class="hero-section">
-        <img src="{{ asset('images/hero-header-optimized.jpg') }}" alt="VitaKiez - Gemütliches Wohnen im Alter"
-            class="hero-image" loading="eager" />
+    <header>
+        <img src="images/hero-header-optimized.jpg" alt="VitaKiez - Gemütliches Wohnen im Alter" class="hero-image"
+            loading="eager" />
         <div class="hero-content">
             <div class="container">
                 <h1>VitaKiez</h1>
@@ -593,8 +99,6 @@
             </div>
         </div>
     </header>
-
-
 
     <!-- Vision Section -->
     <section id="vision" class="vision">
@@ -609,7 +113,7 @@
                     mit professioneller Gesundheitsförderung und
                     individueller Betreuung.
                 </p>
-                <p>
+                <p style="margin-top: 20px">
                     Unser Fokus liegt auf
                     <strong>Prävention und Lebensqualität</strong> – damit
                     Sie oder Ihre Angehörigen so lange wie möglich
@@ -728,7 +232,7 @@
                 </p>
 
                 <div class="credentials">
-                    <h4>
+                    <h4 style="margin-bottom: 15px">
                         Ideal für Sie, wenn:
                     </h4>
                     <ul>
@@ -755,7 +259,11 @@
                     </ul>
                 </div>
 
-                <p style="font-style: italic; color: #666;">
+                <p style="
+                            margin-top: 20px;
+                            font-style: italic;
+                            color: #666;
+                        ">
                     <strong>Wichtig:</strong> Wir sind keine klassische
                     Pflegeeinrichtung, sondern eine Wohngemeinschaft mit
                     Fokus auf Gesundheitsförderung und Prävention. Unser
@@ -771,11 +279,15 @@
         <div class="container">
             <h2>Transparente Preisgestaltung</h2>
             <div class="pricing-card">
-                <h3 style="text-align: center;">
+                <h3 style="text-align: center; color: #667eea">
                     Monatliche Kosten
                 </h3>
                 <div class="price">2.800 - 3.200€</div>
-                <p style="color: #666; margin-bottom: 30px;">
+                <p style="
+                            text-align: center;
+                            color: #666;
+                            margin-bottom: 30px;
+                        ">
                     Miete + Betreuungspauschale + Nebenkosten
                 </p>
 
@@ -790,14 +302,24 @@
                     <li>Zentrale Lage in Berlin-Neukölln</li>
                 </ul>
 
-                <p style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <p style="
+                            margin-top: 30px;
+                            padding: 20px;
+                            background: #f8f9fa;
+                            border-radius: 10px;
+                        ">
                     <strong>Pflegekassen-Leistungen:</strong> Je nach
                     Pflegegrad können Sie zusätzliche Leistungen der
                     Pflegekasse in Anspruch nehmen (z.B. Pflegegeld,
                     Verhinderungspflege, Wohngruppenzuschlag).
                 </p>
 
-                <p style="margin-top: 20px; text-align: center; font-size: 0.9em; color: #666;">
+                <p style="
+                            margin-top: 20px;
+                            text-align: center;
+                            font-size: 0.9em;
+                            color: #666;
+                        ">
                     <strong>Für Familien/Investoren:</strong> Das flexible
                     Zimmer ist als Kurzzeitpflege oder Notfall-Option
                     buchbar (190€/Tag).
@@ -811,7 +333,7 @@
         <div class="container">
             <h2>Ihr Gründer & Betreuer</h2>
             <div class="team-profile">
-                <img src="{{ asset('images/Profilbild.jpg') }}" alt="Gründer" class="profile-image" />
+                <img src="images/Profilbild.jpg" alt="Gründer" class="profile-image" />
                 <h3>Bachelor of Arts - Pflege & Gesundheitsförderung</h3>
                 <p style="font-size: 1.1em; margin-bottom: 20px">
                     Mit jahrelanger Erfahrung in der häuslichen Pflege und
@@ -837,8 +359,13 @@
                     </ul>
                 </div>
 
-                <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; margin-top: 20px;">
-                    <h4 style="color: #667eea; margin-bottom: 10px;">
+                <div style="
+                            background: #f0f4ff;
+                            padding: 20px;
+                            border-radius: 10px;
+                            margin-top: 20px;
+                        ">
+                    <h4 style="color: #667eea; margin-bottom: 10px">
                         Meine Motivation:
                     </h4>
                     <p style="font-style: italic">
@@ -864,7 +391,12 @@
     <section id="waitlist" class="waitlist">
         <div class="container">
             <h2>Jetzt Platz sichern oder investieren</h2>
-            <p style="text-align: center; max-width: 700px; margin: 0 auto 50px; font-size: 1.1em;">
+            <p style="
+                        text-align: center;
+                        max-width: 700px;
+                        margin: 0 auto 50px;
+                        font-size: 1.1em;
+                    ">
                 Tragen Sie sich jetzt unverbindlich in unsere Warteliste
                 ein. Wir informieren Sie, sobald wir die passende Immobilie
                 gefunden haben und starten können.
@@ -994,7 +526,12 @@
                 </div>
             </div>
 
-            <p style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+            <p style="
+                        text-align: center;
+                        margin-top: 40px;
+                        color: #666;
+                        font-size: 0.9em;
+                    ">
                 * Ihre Daten werden vertraulich behandelt und nicht an
                 Dritte weitergegeben.
             </p>
@@ -1071,9 +608,6 @@
         </div>
     </section>
 
-    @if (Route::has('login'))
-        <div class="h-14.5 hidden lg:block"></div>
-    @endif
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -1091,7 +625,4 @@
         </div>
     </footer>
 
-
-</body>
-
-</html>
+    </x-layouts::app>

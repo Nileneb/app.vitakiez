@@ -32,7 +32,7 @@ class CaseModel extends Model
      */
     public function getRouteKeyName()
     {
-        return 'id';
+        return 'case_id';
     }
 
     public function wg(): BelongsTo

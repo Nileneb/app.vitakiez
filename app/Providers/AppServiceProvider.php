@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\CaseModel;
 use App\Models\User;
 use App\Models\Wg;
+use App\Policies\CasePolicy;
 use App\Policies\WgPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     protected function configurePolicies(): void
     {
         Gate::policy(Wg::class, WgPolicy::class);
+        Gate::policy(CaseModel::class, CasePolicy::class);
     }
 
     protected function shareDataWithViews(): void

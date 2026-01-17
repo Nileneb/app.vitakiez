@@ -7,7 +7,7 @@
                     <h1 class="text-2xl font-bold mb-2">Fälle</h1>
                     <p class="text-neutral-600 dark:text-neutral-400">Verwaltung aller dokumentierten Rechtsfälle</p>
                 </div>
-                <a href="#"
+                <a href="{{ route('cases.create') }}"
                     class="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium transition-colors">
                     + Neuer Fall
                 </a>
@@ -52,12 +52,16 @@
                                                 {{ $case->created_at->format('d.m.Y') }}</td>
                                             <td class="px-6 py-4 text-right">
                                                 <div class="flex items-center justify-end gap-2">
-                                                    <a href="#"
+                                                    <a href="{{ route('cases.show', $case->case_id) }}"
                                                         class="px-3 py-2 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-100 rounded transition-colors">Details</a>
-                                                    <a href="#"
+                                                    <a href="{{ route('cases.edit', $case->case_id) }}"
                                                         class="px-3 py-2 text-sm bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 dark:text-amber-100 rounded transition-colors">Bearbeiten</a>
-                                                    <button
-                                                        class="px-3 py-2 text-sm bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-100 rounded transition-colors">Löschen</button>
+                                                    <form method="POST" action="{{ route('cases.destroy', $case->case_id) }}" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" onclick="return confirm('Fall wirklich löschen?')"
+                                                            class="px-3 py-2 text-sm bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-100 rounded transition-colors">Löschen</button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>

@@ -174,7 +174,6 @@ class WgController extends Controller
         $user = Auth::user();
         $user->update(['active_wg_id' => $wg->wg_id]);
 
-        return redirect()->route('wgs.show', $wg->wg_id)
-            ->with('success', 'WG aktiviert.');
+        return back()->with('success', 'WG aktiviert.');
     }
 }
