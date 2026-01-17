@@ -11,7 +11,10 @@ Route::middleware(['auth'])->group(function () {
     
     // API Tokens - using Blade view instead of Livewire for simplicity
     Route::get('settings/api-tokens', function () {
-        return view('pages.settings.api-tokens');
+        return view('pages.settings.api-tokens', [
+            'heading' => __('API Tokens'),
+            'subheading' => __('Create and manage API tokens for integrations'),
+        ]);
     })->name('api-tokens.show');
 
     // API Token management
