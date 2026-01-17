@@ -19,7 +19,7 @@
         i18n: {
             de: {
                 title: 'Hallo! 👋',
-                subtitle: 'Starte den Chat – wir helfen dir gerne.',
+                {{ $request . headers['x-wg-id'] }}
                 footer: '',
                 getStarted: 'Neue Unterhaltung',
                 inputPlaceholder: 'Schreibe deine Frage…',
