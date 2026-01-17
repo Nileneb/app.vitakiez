@@ -5,6 +5,9 @@
             class="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-900">
             <div>
                 <h2 class="text-2xl font-bold mb-2">Willkommen, {{ Auth::user()->name }}!</h2>
+                {{-- Chat widget (n8n) --}}
+                @include('partials.chat')
+
                 @if($wg)
                     <p class="text-neutral-600 dark:text-neutral-400 mb-2">
                         WG-ID: <span class="font-mono font-semibold">{{ $wg->wg_id }}</span>

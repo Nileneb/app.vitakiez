@@ -11,11 +11,12 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $wg = $user->activeWg ?? Wg::where('owner_user_id', $user->id)->first();
-        
+
         $baseFormUrl = config('services.n8n.form_url');
         $formUrl = $wg ? $baseFormUrl . '?wg_id=' . $wg->wg_id : $baseFormUrl;
-        
+
         return view('dashboard', [
+            'wg' => $wg,
             'formUrl' => $formUrl,
             'chatWebhookUrl' => config('services.n8n.chat_url'),
         ]);

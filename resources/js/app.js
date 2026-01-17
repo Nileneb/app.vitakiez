@@ -26,12 +26,15 @@ function submitForm(event, type) {
 
     const form = event.target;
     const formData = new FormData(form);
-    const data = { type };
+    const data = {};
 
     // Convert FormData to object
     formData.forEach((value, key) => {
         data[key] = value;
     });
+
+    // Add user_type field based on form type
+    data.user_type = type; // 'bewohner' or 'investor'
 
     // Disable submit button
     const submitButton = form.querySelector('button[type="submit"]');
@@ -39,38 +42,47 @@ function submitForm(event, type) {
     submitButton.disabled = true;
     submitButton.textContent = "Wird gesendet...";
 
-    // Send to backend
-    fetch("/api/submit-form", {
+    // Send to /register endpoint (Fortify's registration route)
+    fetch("/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')?.content || '',
         },
         body: JSON.stringify(data),
     })
-        .then((response) => response.json())
-        .then((result) => {
-            if (result.success) {
-                // Show success message
-                let successMessage;
-                if (type === "bewohner") {
-                    successMessage = document.getElementById("b-success");
-                } else {
-                    successMessage = document.getElementById("i-success");
-                }
-
-                successMessage.style.display = "block";
-                successMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-                // Reset form
-                form.reset();
-
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    successMessage.style.display = "none";
-                }, 5000);
+        .then((response) => {
+            // Handle both successful registration and validation errors
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 422) {
+                // Validation error
+                return response.json().then(result => {
+                    throw new Error(JSON.stringify(result.errors));
+                });
             } else {
-                alert("Fehler: " + result.message);
+                throw new Error("Registration failed");
             }
+        })
+        .then((result) => {
+            // Show success message
+            let successMessage;
+            if (type === "bewohner") {
+                successMessage = document.getElementById("b-success");
+            } else {
+                successMessage = document.getElementById("i-success");
+            }
+
+            successMessage.style.display = "block";
+            successMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+            // Reset form
+            form.reset();
+
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMessage.style.display = "none";
+            }, 5000);
         })
         .catch((error) => {
             console.error("Error:", error);
@@ -95,11 +107,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Form submissions
-    document.querySelectorAll("form").forEach((form) => {
+    // Form submissions (scope to waitlist forms only)
+    const waitlistForms = document.querySelectorAll("#bewohner-form form, #investoren-form form");
+    waitlistForms.forEach((form) => {
         form.addEventListener("submit", function (e) {
-            const formId = this.parentElement.id;
-            const type = formId === "bewohner-form" ? "bewohner" : "investor";
+            const wrapper = this.closest(".tab-content");
+            if (!wrapper) return; // safety guard
+            const type = wrapper.id === "bewohner-form" ? "bewohner" : "investor";
             submitForm(e, type);
         });
     });

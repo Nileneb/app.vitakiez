@@ -25,6 +25,13 @@ class User extends Authenticatable
         'email',
         'password',
         'active_wg_id',
+        'phone',
+        'user_type',
+        'pflegegrad',
+        'einzug',
+        'nachricht',
+        'interesse',
+        'betrag',
     ];
 
     /**
