@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create test user without using factory (faker not available in production)
-        $password = 'password!';
+        $password = 'Testpass123!';
         $user = User::create([
             'name' => 'Test',
             'email' => 'test@mail.de',
