@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('active_wg_id')->references('id')->on('wgs')->nullOnDelete();
+            $table->foreign('active_wg_id')->references('wg_id')->on('wgs')->nullOnDelete();
         });
     }
 

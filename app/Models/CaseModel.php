@@ -13,12 +13,12 @@ class CaseModel extends Model
     use HasUuids;
 
     protected $table = 'cases';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'case_id';
     protected $keyType = 'string';
     public $incrementing = false;
 
     protected $fillable = [
-        'wg_id','created_by_user_id','case_title','status','problem_description','case_priority',
+        'wg_id','created_by_user_id','case_title','status','problem_description','priority',
         'required_docs','next_actions','deadlines','source_links','attachments','last_reviewed_at',
         'issue_categories','authority_targets','owner',
     ];

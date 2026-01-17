@@ -8,11 +8,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('wgs', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('wg_id')->primary();
 
             $table->foreignId('owner_user_id')->constrained('users')->cascadeOnDelete();
 
-            $table->string('name');
+            $table->string('wg_name');
             $table->string('address_text')->nullable();
             $table->string('state');         // Bundesland
             $table->string('district')->nullable();
@@ -46,7 +46,7 @@ return new class extends Migration {
 
             $table->timestampsTz();
 
-            $table->unique(['owner_user_id', 'name']);
+            $table->unique(['owner_user_id', 'wg_name']);
             $table->index(['state', 'governance']);
         });
     }
