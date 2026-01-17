@@ -14,6 +14,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('impressum', fn () => view('pages.legal.impressum'))->name('impressum');
+Route::get('datenschutz', fn () => view('pages.legal.datenschutz'))->name('datenschutz');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

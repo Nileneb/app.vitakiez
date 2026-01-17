@@ -566,6 +566,12 @@
                     @auth
                         <li><a href="{{ url('/dashboard') }}"
                                 style="border: 2px solid #667eea; padding: 8px 16px; border-radius: 5px;">Dashboard</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" style="background: none; border: none; color: #667eea; cursor: pointer; text-decoration: underline; padding: 0; font: inherit;">Logout</button>
+                            </form>
+                        </li>
                     @else
                         <li><a href="{{ route('login') }}">Log in</a></li>
                         @if (Route::has('register'))
@@ -1084,9 +1090,11 @@
             </p>
             <p style="margin-top: 20px; font-size: 0.8em; color: #999">
                 © 2025 VitaKiez |
-                <a href="/impressum.html" style="color: #999; text-decoration: underline">Impressum</a>
+                <a href="{{ route('impressum') }}"
+                    style="color: #999; text-decoration: underline">Impressum</a>
                 |
-                <a href="/datenschutz.html" style="color: #999; text-decoration: underline">Datenschutz</a>
+                <a href="{{ route('datenschutz') }}"
+                    style="color: #999; text-decoration: underline">Datenschutz</a>
             </p>
         </div>
     </footer>
