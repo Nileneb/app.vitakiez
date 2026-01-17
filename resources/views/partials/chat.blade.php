@@ -26,5 +26,8 @@
             }
         },
         enableStreaming: false,
+        headers: {
+            'X-WG-ID': '{{ auth()->user()?->active_wg_id ?? '' }}'
+        },
     });
 </script>
