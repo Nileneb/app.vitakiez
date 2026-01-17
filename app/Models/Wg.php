@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GermanState;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +27,7 @@ class Wg extends Model
     ];
 
     protected $casts = [
+        'state' => GermanState::class,
         'has_24h_presence' => 'boolean',
         'has_presence_staff' => 'boolean',
         'lease_individual' => 'boolean',

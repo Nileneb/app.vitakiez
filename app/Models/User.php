@@ -32,6 +32,7 @@ class User extends Authenticatable
         'nachricht',
         'interesse',
         'betrag',
+        'n8n_api_key',
     ];
 
     /**

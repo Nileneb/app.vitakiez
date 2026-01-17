@@ -38,6 +38,9 @@ return [
     'n8n' => [
         'form_url' => env('N8N_FORM_URL', 'https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/n8n-form'),
         'chat_url' => env('N8N_CHAT_URL', 'https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/chat'),
+        // REST API configuration
+        'api_url' => env('N8N_API_URL'),
+        'api_token' => env('N8N_API_TOKEN'),
     ],
 
 ];

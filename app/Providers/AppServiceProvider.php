@@ -61,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
     protected function registerObservers(): void
     {
         \App\Models\CaseModel::observe(\App\Observers\CaseObserver::class);
+        \App\Models\Wg::observe(\App\Observers\WgObserver::class);
     }
 
     protected function configureDefaults(): void

@@ -19,15 +19,17 @@
         i18n: {
             de: {
                 title: 'Hallo! 👋',
-                {{ $request . headers['x-wg-id'] }}
+
                 footer: '',
                 getStarted: 'Neue Unterhaltung',
                 inputPlaceholder: 'Schreibe deine Frage…',
             }
         },
         enableStreaming: false,
-        headers: {
-            'X-WG-ID': '{{ auth()->user()?->active_wg_id ?? '' }}'
-        },
+        metadata: {
+            'X-WG-ID': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id ?? '' }}',
+            'X-User-Key': '{{ auth()->user()?->n8n_api_key ?? '' }}',
+            'X-User-Email': '{{ auth()->user()?->email ?? '' }}'
+        }
     });
 </script>
