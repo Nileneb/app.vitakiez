@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Wg;
-use App\Models\Issue;
 use App\Models\Authority;
 use App\Models\CaseModel;
+use App\Models\Issue;
 use App\Models\SourceEvidence;
+use App\Models\User;
+use App\Models\Wg;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create test user without using factory (faker not available in production)
-        $password = 'password!';
+        $password = 'Testpass123!';
         $user = User::create([
             'name' => 'Test',
             'email' => 'test@mail.de',
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         // Create some WGs
         $wg1 = Wg::create([
             'owner_user_id' => $user->id,
-            'name' => 'Pflege-WG Linn',
+            'wg_name' => 'Pflege-WG Linn',
             'state' => 'NRW',
             'district' => 'Köln',
             'municipality' => 'Köln',
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
 
         $wg2 = Wg::create([
             'owner_user_id' => $user->id,
-            'name' => 'Gemeinschaftswohnen Bremen',
+            'wg_name' => 'Gemeinschaftswohnen Bremen',
             'state' => 'Bremen',
             'district' => null,
             'municipality' => 'Bremen',
@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
         $case = CaseModel::create([
             'wg_id' => $wg1->wg_id,
             'created_by_user_id' => $user->id,
-            'title' => 'WG-Zuschlag § 38a beantragen',
+            'case_title' => 'WG-Zuschlag § 38a beantragen',
             'status' => 'IN_PROGRESS',
             'problem_description' => 'Wir benötigen Informationen zur korrekten Beantragung des WG-Zuschlags',
             'priority' => 'HIGH',
@@ -178,7 +178,7 @@ class DatabaseSeeder extends Seeder
     {
         $envFile = base_path('.env');
 
-        if (!file_exists($envFile)) {
+        if (! file_exists($envFile)) {
             return;
         }
 

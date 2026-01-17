@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->uuid('authority_id');
             $table->primary(['case_id','authority_id']);
 
-            $table->foreign('case_id')->references('id')->on('cases')->cascadeOnDelete();
+            $table->foreign('case_id')->references('case_id')->on('cases')->cascadeOnDelete();
             $table->foreign('authority_id')->references('id')->on('authorities')->cascadeOnDelete();
 
             $table->timestampsTz();

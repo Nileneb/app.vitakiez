@@ -24,6 +24,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'active_wg_id',
+        'phone',
+        'user_type',
+        'pflegegrad',
+        'einzug',
+        'nachricht',
+        'interesse',
+        'betrag',
     ];
 
     /**
@@ -76,6 +84,6 @@ class User extends Authenticatable
      */
     public function activeWg()
     {
-        return $this->belongsTo(Wg::class, 'active_wg');
+        return $this->belongsTo(Wg::class, 'active_wg_id', 'wg_id');
     }
 }

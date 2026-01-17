@@ -8,12 +8,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('cases', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('case_id')->primary();
 
-            $table->foreignUuid('wg_id')->constrained('wgs')->cascadeOnDelete();
+            $table->foreignUuid('wg_id')->constrained('wgs', 'wg_id')->cascadeOnDelete();
             $table->foreignId('created_by_user_id')->constrained('users')->cascadeOnDelete();
 
-            $table->string('title');
+            $table->string('case_title');
             $table->enum('status', ['OPEN','IN_PROGRESS','WAITING','DONE','ARCHIVED'])->default('OPEN');
             $table->text('problem_description');
 

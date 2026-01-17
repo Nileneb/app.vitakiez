@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('source_evidence', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->foreignUuid('case_id')->constrained('cases')->cascadeOnDelete();
+            $table->foreignUuid('case_id')->constrained('cases', 'case_id')->cascadeOnDelete();
             $table->foreignUuid('issue_id')->nullable()->constrained('issues')->nullOnDelete();
 
             $table->string('url');

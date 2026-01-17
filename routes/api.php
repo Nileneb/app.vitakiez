@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthTokenController;
-use App\Http\Controllers\Api\WgController;
 use App\Http\Controllers\Api\CaseController;
 use App\Http\Controllers\Api\SourceEvidenceController;
+use App\Http\Controllers\Api\WgController;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/token', [AuthTokenController::class, 'issueToken']);
 

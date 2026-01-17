@@ -12,8 +12,13 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    base: '',
     server: {
+        host: '0.0.0.0',
         cors: true,
+        hmr: {
+            host: 'app.vitakiez.test',
+        },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },

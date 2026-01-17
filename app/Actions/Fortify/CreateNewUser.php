@@ -22,12 +22,26 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             ...$this->profileRules(),
             'password' => $this->passwordRules(),
+            'phone' => ['nullable', 'string', 'max:20'],
+            'user_type' => ['nullable', 'in:bewohner,investor'],
+            'pflegegrad' => ['nullable', 'string', 'max:50'],
+            'einzug' => ['nullable', 'string', 'max:100'],
+            'nachricht' => ['nullable', 'string', 'max:1000'],
+            'interesse' => ['nullable', 'string', 'max:50'],
+            'betrag' => ['nullable', 'string', 'max:50'],
         ])->validate();
 
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
+            'phone' => $input['phone'] ?? null,
+            'user_type' => $input['user_type'] ?? null,
+            'pflegegrad' => $input['pflegegrad'] ?? null,
+            'einzug' => $input['einzug'] ?? null,
+            'nachricht' => $input['nachricht'] ?? null,
+            'interesse' => $input['interesse'] ?? null,
+            'betrag' => $input['betrag'] ?? null,
         ]);
     }
 }
