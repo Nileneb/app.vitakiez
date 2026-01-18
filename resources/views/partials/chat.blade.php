@@ -25,11 +25,9 @@
                 inputPlaceholder: 'Schreibe deine Frage…',
             }
         },
-        enableStreaming: false,
+        enableStreaming: true,
         metadata: {
-            'X-WG-ID': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id ?? '' }}',
-            'X-User-Key': '{{ auth()->user()?->n8n_api_key ?? '' }}',
-            'X-User-Email': '{{ auth()->user()?->email ?? '' }}'
+            'X-WG-ID': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id ?? '' }}'
         }
     });
 </script>
