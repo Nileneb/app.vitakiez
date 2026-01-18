@@ -33,6 +33,7 @@ class User extends Authenticatable
         'interesse',
         'betrag',
         'n8n_api_key',
+        'n8n_credential_id',
     ];
 
     /**

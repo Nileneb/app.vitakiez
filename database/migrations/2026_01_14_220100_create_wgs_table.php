@@ -43,6 +43,7 @@ return new class extends Migration {
             $table->string('heimaufsicht_contact_hint')->nullable();
 
             $table->text('notes')->nullable();
+            $table->string('n8n_api_key', 128)->nullable();
 
             $table->timestampsTz();
 

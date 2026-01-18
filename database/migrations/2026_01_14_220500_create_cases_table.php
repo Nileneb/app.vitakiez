@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->text('source_links')->nullable();
             $table->text('attachments')->nullable();
 
+            $table->string('evaluated')->default('false');
             $table->timestampTz('last_reviewed_at')->nullable();
 
             $table->timestampsTz();
