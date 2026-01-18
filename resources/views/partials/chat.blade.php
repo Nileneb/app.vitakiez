@@ -19,8 +19,7 @@
         i18n: {
             de: {
                 title: 'Hallo! 👋',
-
-                footer: '',
+                footer: 'Du suchst Probleme? Lass uns gemeinsam suchen!',
                 getStarted: 'Neue Unterhaltung',
                 inputPlaceholder: 'Schreibe deine Frage…',
             }
