@@ -1,3 +1,4 @@
+-- Active: 1765016626043@@127.0.0.1@5432@n8n
 <?php
 
 use App\Http\Controllers\Api\AuthTokenController;

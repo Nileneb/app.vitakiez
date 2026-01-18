@@ -91,6 +91,21 @@ class WgController extends Controller
         return response()->json($wg, 201);
     }
 
+    /**
+     * Display the specified WG (by wg_id, using Route Model Binding).
+     */
+    public function show(Wg $wg)
+    {
+        // Policy check: user must own the WG
+        // Using implicit authorization via WgPolicy (if registered)
+        // If no policy: manual check
+        if ($wg->owner_user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        return response()->json($wg);
+    }
+
     public function getActive(Request $request)
     {
         $user = $request->user();

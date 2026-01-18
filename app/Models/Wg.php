@@ -27,7 +27,6 @@ class Wg extends Model
     ];
 
     protected $casts = [
-        'state' => GermanState::class,
         'has_24h_presence' => 'boolean',
         'has_presence_staff' => 'boolean',
         'lease_individual' => 'boolean',
