@@ -42,7 +42,7 @@ class GenerateN8nKey extends Command
 
     protected function setKeyInEnvironmentFile(string $key): bool
     {
-        $envPath = $this->laravel->environmentFilePath();
+        $envPath = base_path('.env');
         $contents = file_get_contents($envPath);
 
         // Check if N8N_API_KEY already exists
