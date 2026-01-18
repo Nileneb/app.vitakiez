@@ -7,8 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\SourceEvidenceController;
 use App\Http\Controllers\WgController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
@@ -100,27 +100,27 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/debug/n8n-chat', function () {
     $wgId = '019bcdb0-e369-7221-8a39-fc7e22ce69d6';
     $chatInput = 'Hallo, wir brauchen Hilfe mit dem WG-Zuschlag';
-    
+
     return response()->json([
         'step1' => 'Test n8n Chat Webhook',
         'wg_id' => $wgId,
         'chat_input' => $chatInput,
         'payload' => [
             'chatInput' => $chatInput,
-            'metadata' => ['X-WG-ID' => $wgId]
+            'metadata' => ['X-WG-ID' => $wgId],
         ],
-        'curl_command' => "curl -X POST -H 'Content-Type: application/json' https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/chat -d '{\"chatInput\":\"$chatInput\",\"metadata\":{\"X-WG-ID\":\"$wgId\"}}'"
+        'curl_command' => "curl -X POST -H 'Content-Type: application/json' https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/chat -d '{\"chatInput\":\"$chatInput\",\"metadata\":{\"X-WG-ID\":\"$wgId\"}}'",
     ]);
 });
 
 Route::get('/debug/n8n-getwg', function () {
     $token = env('N8N_LARAVEL_API_TOKEN');
     $wgId = '019bcdb0-e369-7221-8a39-fc7e22ce69d6';
-    
+
     $response = Http::withToken($token)
         ->withHeaders(['Accept' => 'application/json'])
         ->get("https://app.vitakiez.de/api/wgs/{$wgId}");
-    
+
     return response()->json([
         'endpoint' => "/api/wgs/{$wgId}",
         'token_valid' => $response->status() === 200,
@@ -133,30 +133,30 @@ Route::post('/debug/n8n-test', function () {
     $wgId = '019bcdb0-e369-7221-8a39-fc7e22ce69d6';
     $chatInput = request('input', 'Hallo, Hilfe mit dem WG-Zuschlag');
     $token = env('N8N_LARAVEL_API_TOKEN');
-    
+
     try {
         // Get WG
         $wgResponse = Http::withToken($token)
             ->withHeaders(['Accept' => 'application/json'])
             ->get("https://app.vitakiez.de/api/wgs/{$wgId}");
-        
+
         // Call Chat
         $chatResponse = Http::post('https://n8n.linn.games/webhook/5dd82489-f71f-4c10-97aa-564fb844ec2d/chat', [
             'chatInput' => $chatInput,
-            'metadata' => ['X-WG-ID' => $wgId]
+            'metadata' => ['X-WG-ID' => $wgId],
         ]);
-        
+
         return response()->json([
             'wg_status' => $wgResponse->status(),
             'wg_data' => $wgResponse->json(),
             'chat_status' => $chatResponse->status(),
             'chat_response' => $chatResponse->json() ?? $chatResponse->body(),
-            'success' => $chatResponse->successful()
+            'success' => $chatResponse->successful(),
         ]);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         return response()->json([
             'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
+            'trace' => $e->getTraceAsString(),
         ], 500);
     }
 });
