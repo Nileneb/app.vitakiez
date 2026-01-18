@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\GermanState;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,12 +17,12 @@ class Wg extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'owner_user_id','wg_name','address_text','state','district','municipality',
-        'governance','residents_total','residents_with_pg','target_group',
-        'has_24h_presence','has_presence_staff','care_provider_mode',
-        'lease_individual','care_individual','bundle_housing_care',
-        'sgb_xi_used','sgb_xii_involved','sgb_v_hkp',
-        'landesrecht_title','landesrecht_url','heimaufsicht_contact_hint','notes',
+        'owner_user_id', 'wg_name', 'address_text', 'state', 'district', 'municipality',
+        'governance', 'residents_total', 'residents_with_pg', 'target_group',
+        'has_24h_presence', 'has_presence_staff', 'care_provider_mode',
+        'lease_individual', 'care_individual', 'bundle_housing_care',
+        'sgb_xi_used', 'sgb_xii_involved', 'sgb_v_hkp',
+        'landesrecht_title', 'landesrecht_url', 'heimaufsicht_contact_hint', 'notes',
     ];
 
     protected $casts = [
