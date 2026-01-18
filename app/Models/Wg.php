@@ -23,6 +23,7 @@ class Wg extends Model
         'lease_individual', 'care_individual', 'bundle_housing_care',
         'sgb_xi_used', 'sgb_xii_involved', 'sgb_v_hkp',
         'landesrecht_title', 'landesrecht_url', 'heimaufsicht_contact_hint', 'notes',
+        'n8n_api_key',
     ];
 
     protected $casts = [

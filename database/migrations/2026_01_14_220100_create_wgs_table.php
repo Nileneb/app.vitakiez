@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('district')->nullable();
             $table->string('municipality')->nullable();
 
-            $table->enum('governance', ['SELF_ORGANIZED','PROVIDER_ORGANIZED','MIXED','UNKNOWN'])->default('UNKNOWN');
+            $table->enum('governance', ['SELF_ORGANIZED', 'PROVIDER_ORGANIZED', 'MIXED', 'UNKNOWN'])->default('UNKNOWN');
 
             $table->unsignedSmallInteger('residents_total')->default(0);
             $table->unsignedSmallInteger('residents_with_pg')->default(0);
@@ -28,7 +28,7 @@ return new class extends Migration {
             $table->boolean('has_24h_presence')->default(false);
             $table->boolean('has_presence_staff')->default(false);
 
-            $table->enum('care_provider_mode', ['FREE_CHOICE','SINGLE_PROVIDER','INHOUSE','MIXED','UNKNOWN'])->default('UNKNOWN');
+            $table->enum('care_provider_mode', ['FREE_CHOICE', 'SINGLE_PROVIDER', 'INHOUSE', 'MIXED', 'UNKNOWN'])->default('UNKNOWN');
 
             $table->boolean('lease_individual')->default(false);
             $table->boolean('care_individual')->default(false);
@@ -43,6 +43,7 @@ return new class extends Migration {
             $table->string('heimaufsicht_contact_hint')->nullable();
 
             $table->text('notes')->nullable();
+            $table->string('n8n_api_key', 128)->nullable();
 
             $table->timestampsTz();
 

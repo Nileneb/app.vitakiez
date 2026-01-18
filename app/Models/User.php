@@ -13,7 +13,10 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +36,7 @@ class User extends Authenticatable
         'interesse',
         'betrag',
         'n8n_api_key',
+        'n8n_credential_id',
     ];
 
     /**
@@ -61,7 +65,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's initials
+     * Get the user's initials.
      */
     public function initials(): string
     {
@@ -73,7 +77,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the WGs owned by this user
+     * Get the WGs owned by this user.
      */
     public function wgs()
     {
@@ -81,7 +85,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the active WG for this user
+     * Get the active WG for this user.
      */
     public function activeWg()
     {

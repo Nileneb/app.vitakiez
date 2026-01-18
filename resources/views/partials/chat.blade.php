@@ -25,11 +25,18 @@
                 inputPlaceholder: 'Schreibe deine Frage…',
             }
         },
-        enableStreaming: false,
+        enableStreaming: true,
         metadata: {
-            'X-WG-ID': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id ?? '' }}',
-            'X-User-Key': '{{ auth()->user()?->n8n_api_key ?? '' }}',
-            'X-User-Email': '{{ auth()->user()?->email ?? '' }}'
+            'X-WG-ID': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id ?? '' }}'
         }
     });
+
+    // DEBUG: Log metadata in browser console
+    console.log('[n8n Chat] Metadata being sent:', {
+        'X-WG-ID': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id ?? '' }}',
+        'resolved_value': '{{ $wg?->wg_id ?? auth()->user()?->active_wg_id }}',
+        'wg_object': {{ $wg ? 'true' : 'false' }},
+        'user_active_wg_id': '{{ auth()->user()?->active_wg_id }}'
+    });
+
 </script>

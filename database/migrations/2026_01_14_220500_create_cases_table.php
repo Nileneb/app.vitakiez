@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->foreignId('created_by_user_id')->constrained('users')->cascadeOnDelete();
 
             $table->string('case_title');
-            $table->enum('status', ['OPEN','IN_PROGRESS','WAITING','DONE','ARCHIVED'])->default('OPEN');
+            $table->enum('status', ['OPEN', 'IN_PROGRESS', 'WAITING', 'DONE', 'ARCHIVED'])->default('OPEN');
             $table->text('problem_description');
 
-            $table->enum('priority', ['LOW','MEDIUM','HIGH','CRITICAL'])->default('MEDIUM');
+            $table->enum('priority', ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])->default('MEDIUM');
 
             // Übergangsfelder (bis UI/Normalisierung vollständig ist)
             $table->text('required_docs')->nullable();   // semikolon / json später
@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->text('source_links')->nullable();
             $table->text('attachments')->nullable();
 
+            $table->string('evaluated')->default('false');
             $table->timestampTz('last_reviewed_at')->nullable();
 
             $table->timestampsTz();
